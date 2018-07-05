@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "http-proxy-web-debugger-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -1,12 +1,13 @@
 {
-  "name": "httpProxy",
-  "version": "1.0.0",
+  "name": "http-proxy-web-debugger",
+  "version": "0.1.0",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
     "docker_build": "make docker_build",
-    "docker_push": "make docker_push"
+    "docker_push": "make docker_push",
+    "docker_run": "make docker_run"
   },
   "license": "MIT",
   "dependencies": {

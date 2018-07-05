@@ -100,7 +100,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1 className="App-logo"><Icon type="global" className="App-logo-icon" /> HTTP Proxy Debugger</h1>
+        <h1 className="App-logo"><Icon type="global" className="App-logo-icon" /> HTTP Proxy Web Debugger</h1>
 
         <Row gutter={16}>
           <Col span={12}>
