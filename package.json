@@ -1,0 +1,18 @@
+{
+  "name": "httpProxy",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
+    "docker_build": "make docker_build",
+    "docker_push": "make docker_push"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^3.5.1",
+    "http-proxy": "^1.17.0",
+    "uuid": "^3.2.1",
+    "ws": "^5.1.1"
+  }
+}

@@ -1,0 +1,30 @@
+.RequestDetail {
+
+}
+
+.ant-card {
+    background: transparent !important;
+    color: #fff !important;
+    border-radius: 0px !important;
+}
+
+.ant-card-head {
+    background: transparent !important;
+    border-radius: 0px !important;
+    border-bottom-color: rgba(255, 255, 255, .2) !important;
+}
+
+.ant-card-body {
+    background: transparent !important;
+    font-size: .8rem;
+}
+
+.ant-card-head-title {
+    color: #fff !important;
+    padding: 12px 0 !important;
+    font-size: 1rem !important;
+}
+
+.ant-card-bordered {
+    border-color: rgba(255, 255, 255, .2) !important;
+}

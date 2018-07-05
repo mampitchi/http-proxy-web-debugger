@@ -1,0 +1,11 @@
+.git
+.gitignore
+Dockerfile
+Makefile
+node_modules
+**/node_modules
+npm-debug.log
+**/npm-debug.log
+yarn-error.log
+**/yarn-error.log
+README.md
