@@ -2,6 +2,10 @@
 
 }
 
+.RequestDetail pre {
+    font-size: 0.7rem;
+}
+
 .ant-card {
     background: transparent !important;
     color: #fff !important;
