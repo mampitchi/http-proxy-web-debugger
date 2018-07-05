@@ -18,7 +18,7 @@ $ docker run --name http-proxy-web-debugger -d -p 10800:10800 -p 10801:10801 rol
 - Persist requests (Logstash, Kibana)
 
 
-## Contribution
+## Contribution
 Send me your pull requests. You are welcome!
 
 ### Run Development
