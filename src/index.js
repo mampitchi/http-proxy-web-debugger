@@ -54,14 +54,16 @@ proxy.on('proxyRes', function(proxyRes, req, res) {
     requests[res.getHeader(HEADER_CORRELATION_NAME)].response = {
         statusCode: proxyRes.statusCode,
         httpVersion: proxyRes.httpVersion,
-        headers: proxyRes.headers
+        headers: proxyRes.headers,
+        body: '',
+        bodyLength: 0
     }
 
     proxyRes.on('data', function(dataBuffer) {
         const body = dataBuffer.toString('utf8')
-        
-        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['body'] = dataBuffer.toString('utf8')
-        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['bodyLength'] = body.length
+   
+        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['body'] += body // TODO consider concating with Buffer
+        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['bodyLength'] += body.length
     })
 
     proxyRes.on('end', function() {
