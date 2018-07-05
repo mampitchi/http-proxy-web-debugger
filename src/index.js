@@ -5,6 +5,7 @@ const uuidv1 = require('uuid/v1')
 const WebSocket = require('ws')
 const fs = require('fs')
 const path = require('path')
+const { ungzip } = require('node-gzip')
 
 const wss = new WebSocket.Server({ port: 10801 })
 
@@ -55,18 +56,43 @@ proxy.on('proxyRes', function(proxyRes, req, res) {
         statusCode: proxyRes.statusCode,
         httpVersion: proxyRes.httpVersion,
         headers: proxyRes.headers,
-        body: '',
-        bodyLength: 0
+        body: Buffer.from('')
     }
 
     proxyRes.on('data', function(dataBuffer) {
-        const body = dataBuffer.toString('utf8')
-   
-        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['body'] += body // TODO consider concating with Buffer
-        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['bodyLength'] += body.length
+        requests[res.getHeader(HEADER_CORRELATION_NAME)].response['body'] = Buffer.concat([requests[res.getHeader(HEADER_CORRELATION_NAME)].response['body'], dataBuffer])
     })
 
-    proxyRes.on('end', function() {
+    proxyRes.on('end', async function() {
+        let responseHeaders = requests[res.getHeader(HEADER_CORRELATION_NAME)].response.headers
+        let responseContentEncodings = responseHeaders['content-encoding'] || responseHeaders['Content-Encoding'] || undefined
+        let responseBody = requests[res.getHeader(HEADER_CORRELATION_NAME)].response.body
+
+        // decompress section
+        if (typeof responseContentEncodings !== 'undefined') {
+            for (let responseContentEncoding of responseContentEncodings.replace(/\s/g, '').split(",")) {
+                if (responseContentEncoding === "gzip") {
+                    try {
+                        const decompressed = await ungzip(responseBody)
+                        responseBody = decompressed.toString()
+                    } catch (e) {
+                        console.error(e); // caught
+                    }
+                }
+                /*
+                TODO encodings: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding
+                Content-Encoding: compress
+                Content-Encoding: deflate
+                Content-Encoding: identity
+                Content-Encoding: br
+                */
+            }
+        }
+
+        responseBody = responseBody.toString('utf8')
+        requests[res.getHeader(HEADER_CORRELATION_NAME)].response.body = responseBody
+        requests[res.getHeader(HEADER_CORRELATION_NAME)].response.bodyLength = responseBody.length
+    
         broadcastMessage('newRequest', requests[res.getHeader(HEADER_CORRELATION_NAME)])
 
         delete requests[res.getHeader(HEADER_CORRELATION_NAME)]
@@ -75,12 +101,12 @@ proxy.on('proxyRes', function(proxyRes, req, res) {
 })
 
 proxy.on('error', function (err, req, res) {
-  res.writeHead(500, {
-    'Content-Type': 'text/plain'
-  });
+    res.writeHead(500, {
+        'Content-Type': 'text/plain'
+    });
 
-  res.end('HttpProxyDebuggerError: ' + err.message)
-  broadcastMessage('error', { message: err.message, code: err.code } )
+    res.end('HttpProxyDebuggerError: ' + err.message)
+    broadcastMessage('error', { message: err.message, code: err.code } )
 })
 
 const server = http.createServer(function(req, res) {
