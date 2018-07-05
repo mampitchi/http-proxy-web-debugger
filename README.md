@@ -4,18 +4,19 @@ HTTP Proxy Web Debugger is HTTP Proxy with Web Monitor. With this project you ca
 
 It is built on Node.js, http-proxy npm module, WebSockets and React. You can run it locally with Docker.
 
+## Example
 ![Example of HTTP Proxy with Web Monitor](https://raw.githubusercontent.com/radoslavoleksak/http-proxy-web-debugger/master/resources/img/http-proxy-web-debugger.png)
 
-## Usage
+## USAGE
 ```
 $ docker run --name http-proxy-web-debugger -d -p 10800:10800 -p 10801:10801 rolexak/http-proxy-web-debugger
 ``` 
 
-## Milestones
+## PLANS
 1. HTTPS certs
 2. Persist requests (Logstash, Kibana)
 
-## Development
+### CONTRIBUTION
 
 ### Run Development
 ```
