@@ -9,6 +9,17 @@ const { ungzip } = require('node-gzip')
 
 const wss = new WebSocket.Server({ port: 10801 })
 
+wss.on('connection', function(ws, req) {
+    const ip = req.connection.remoteAddress;
+
+    console.log(`new connection from ${ip}`)
+    ws.on('message', function(rawMessage) {
+        // console.log('received: %s', rawMessage);
+        const { type, message } = JSON.parse(rawMessage)    
+        broadcastMessage(type, message)
+    });
+});
+
 function broadcastMessage(type, message) {
     wss.clients.forEach(function each(client) { 
         if (client.readyState === WebSocket.OPEN) {
